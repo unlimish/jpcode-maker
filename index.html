@@ -23,16 +23,16 @@
 
 <body class="bg-gray-50 text-gray-800 p-6 min-h-screen">
 
-	<div class="max-w-4xl mx-auto">
+	<div class="max-w-6xl mx-auto">
 
 		<header class="mb-8 text-center sm:text-left border-b border-gray-200 pb-4">
 			<h1 class="text-2xl font-bold text-gray-900">カスタマーコード宛名ラベルメーカー</h1>
 			<!-- <p class="text-sm text-gray-500 mt-1">カスタマーバーコード付きの宛名ラベルを作成します</p> -->
 		</header>
 
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+		<div class="flex grid grid-cols-1 lg:flex gap-8">
 
-			<div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100 h-fit">
+			<div class="w-3xs bg-white p-6 rounded-lg shadow-sm border border-gray-100 h-fit">
 				<h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
 					<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -142,8 +142,8 @@
 				bwipjs.toCanvas('barcodeCanvas', {
 					bcid: 'japanpost',
 					text: barcodeData,
-					scale: 3,
-					height: 10,
+					scale: 2,
+					height: 4,
 					incltext: false,
 					backgroundcolor: 'FFFFFF',
 				});

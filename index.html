@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>宛名・カスタマーコード生成</title>
+	<title>カスタマーコード宛名ラベルメーカー</title>
 
 	<script src="https://cdn.tailwindcss.com"></script>
 
@@ -32,8 +32,8 @@
 
 		<div class="flex grid grid-cols-1 lg:flex gap-8">
 
-			<div class="w-3xs bg-white p-6 rounded-lg shadow-sm border border-gray-100 h-fit">
-				<h2 class="text-lg font-semibold mb-4 text-gray-700 flex items-center">
+			<div class="w-3xs bg-black p-6 rounded-lg shadow-sm border border-gray-100 h-full">
+				<h2 class="text-lg font-semibold mb-4 text-gray-300 flex items-center">
 					<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 							d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
@@ -42,23 +42,23 @@
 					情報の入力
 				</h2>
 
-				<div class="space-y-4">
-					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">郵便番号 <span
-								class="text-xs text-gray-400">(ハイフンなし推奨)</span></label>
+				<div class="space-y-4 ">
+					<div class="">
+						<label class="block text-sm font-medium text-gray-300 mb-1">郵便番号<span class="text-xs text-gray-400">
+								ハイフンなし</span></label>
 						<input type="text" id="inputPost" placeholder="1000001" value="1000001"
-							class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+							class="w-full px-4 py-2 bg-gray-800 border border-gray-800 rounded-md focus:ring-2 focus:ring-red-800 focus:border-red-800 outline-none transition-colors">
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">住所 <span
+						<label class="block text-sm font-medium text-gray-300 mb-1">住所 <span
 								class="text-xs text-gray-400">(番地・部屋番号まで)</span></label>
 						<input type="text" id="inputAddr" placeholder="東京都千代田区千代田1-1" value="東京都千代田区千代田1-1"
-							class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+							class="w-full px-4 py-2 bg-gray-800 border border-gray-800 rounded-md focus:ring-2 focus:ring-red-800 focus:border-red-800 outline-none transition-colors">
 					</div>
 					<div>
-						<label class="block text-sm font-medium text-gray-700 mb-1">宛名</label>
+						<label class="block text-sm font-medium text-gray-300 mb-1">宛名</label>
 						<input type="text" id="inputName" placeholder="日本 太郎 様" value="日本 太郎 様"
-							class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors">
+							class="w-full px-4 py-2 bg-gray-800 border border-gray-800 rounded-md focus:ring-2 focus:ring-red-800 focus:border-red-800 outline-none transition-colors">
 					</div>
 
 					<button onclick="generatePreview()"
@@ -81,7 +81,7 @@
 						プレビュー
 					</h2>
 					<button onclick="downloadImage()"
-						class="text-sm bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded flex items-center transition-colors">
+						class="text-sm hover:bg-red-900 text-white py-1 px-3 rounded flex items-center transition-colors">
 						<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 								d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
@@ -107,7 +107,7 @@
 						</div>
 					</div>
 				</div>
-				<p class="text-xs text-gray-500 mt-2">※ 画像サイズ: 600px x 350px</p>
+				<p class="text-xs text-gray-400 mt-2">※ 画像サイズ: 600px x 350px</p>
 			</div>
 		</div>
 	</div>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>宛名・カスタマーコード生成</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bwip-js/3.0.4/bwip-js-min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+	<style>
+		body {
+			font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+			padding: 20px;
+			background: #f4f4f4;
+			color: #333;
+		}
+
+		.container {
+			max-width: 800px;
+			margin: 0 auto;
+			background: #fff;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+		}
+
+		h1 {
+			font-size: 1.5rem;
+			margin-bottom: 20px;
+			border-bottom: 2px solid #333;
+			padding-bottom: 10px;
+		}
+
+		.input-group {
+			margin-bottom: 15px;
+		}
+
+		label {
+			display: block;
+			margin-bottom: 5px;
+			font-weight: bold;
+		}
+
+		input[type="text"] {
+			width: 100%;
+			padding: 10px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			box-sizing: border-box;
+		}
+
+		.btn {
+			background: #333;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			cursor: pointer;
+			border-radius: 4px;
+			font-size: 1rem;
+		}
+
+		.btn:hover {
+			background: #555;
+		}
+
+		.btn-download {
+			background: #0056b3;
+			margin-top: 20px;
+		}
+
+		/* プレビューエリア（ここが画像化されます） */
+		#preview-area {
+			width: 600px;
+			/* 画像の幅 */
+			height: 350px;
+			/* 画像の高さ */
+			border: 1px solid #ddd;
+			margin-top: 30px;
+			padding: 30px;
+			background: #fff;
+			position: relative;
+			box-sizing: border-box;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+		}
+
+		.address-text {
+			font-size: 18px;
+			line-height: 1.6;
+			margin-bottom: 10px;
+		}
+
+		.postal-code {
+			font-size: 20px;
+			letter-spacing: 2px;
+			margin-bottom: 5px;
+		}
+
+		.name-text {
+			font-size: 32px;
+			font-weight: bold;
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		.barcode-container {
+			text-align: left;
+			margin-top: 10px;
+		}
+
+		/* バーコード下の英数字を隠す場合（日本郵便の規定による） */
+		/* canvas { display: block; } */
+	</style>
+</head>
+
+<body>
+
+	<div class="container">
+		<h1>カスタマーコード宛名生成</h1>
+
+		<div class="input-group">
+			<label>郵便番号 (ハイフンなし7桁推奨)</label>
+			<input type="text" id="inputPost" placeholder="1000001" value="1000001">
+		</div>
+		<div class="input-group">
+			<label>住所 (番地・部屋番号まで)</label>
+			<input type="text" id="inputAddr" placeholder="東京都千代田区千代田1-1" value="東京都千代田区千代田1-1">
+		</div>
+		<div class="input-group">
+			<label>宛名</label>
+			<input type="text" id="inputName" placeholder="日本 太郎 様" value="日本 太郎 様">
+		</div>
+
+		<button class="btn" onclick="generatePreview()">プレビュー更新</button>
+
+		<div id="preview-wrapper" style="overflow: auto;">
+			<div id="preview-area">
+				<div>
+					<div class="postal-code" id="dispPost">〒100-0001</div>
+					<div class="address-text" id="dispAddr">東京都千代田区千代田1-1</div>
+				</div>
+				<div class="name-text" id="dispName">日本 太郎 様</div>
+				<div class="barcode-container">
+					<canvas id="barcodeCanvas"></canvas>
+				</div>
+			</div>
+		</div>
+
+		<button class="btn btn-download" onclick="downloadImage()">画像をダウンロード (PNG)</button>
+	</div>
+
+	<script>
+		// 全角英数・ハイフンを半角に変換し、不要な文字を削除してバーコード用データを抽出する簡易ロジック
+		function cleanAddressForBarcode(zip, address) {
+			// 1. 全角数字・ハイフン・アルファベットを半角に
+			let clean = address.replace(/[Ａ-Ｚａ-ｚ０-９－]/g, function (s) {
+				return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+			});
+
+			// 2. 住所から「漢字・ひらがな・カタカナ」などを除去し、
+			//    数字・ハイフン・アルファベットのみを残す（簡易的な抽出）
+			//    ※厳密な住所正規化には詳細な辞書が必要ですが、ここでは簡易的に処理します
+
+			// 都道府県・市区町村などの日本語を除去する（数字以降を取得する戦略）
+			// 最初の数字が出現する位置を探す
+			const firstDigit = clean.search(/[0-9]/);
+			if (firstDigit !== -1) {
+				clean = clean.substring(firstDigit);
+			} else {
+				clean = ""; // 数字がない場合
+			}
+
+			// 記号類をハイフンに統一したり、連続するハイフンを処理したりする規定がありますが、
+			// bwip-jsのjapanpostタイプはある程度よしなにやってくれます。
+			// ここでは単純に「郵便番号 + 抽出した住所コード」を結合します。
+
+			return zip.replace(/-/g, '') + clean;
+		}
+
+		function generatePreview() {
+			const post = document.getElementById('inputPost').value;
+			const addr = document.getElementById('inputAddr').value;
+			const name = document.getElementById('inputName').value;
+
+			// テキスト表示の更新
+			document.getElementById('dispPost').innerText = "〒" + post;
+			document.getElementById('dispAddr').innerText = addr;
+			document.getElementById('dispName').innerText = name;
+
+			// バーコード用データの生成
+			const barcodeData = cleanAddressForBarcode(post, addr);
+
+			// バーコード描画 (bwip-js)
+			try {
+				bwipjs.toCanvas('barcodeCanvas', {
+					bcid: 'japanpost',       // バーコードの種類: 日本郵便カスタマーコード
+					text: barcodeData,       // データ: 郵便番号+住所表示番号
+					scale: 2,                 // スケール
+					height: 4,                // 高さ（ミリメートル相当の比率）
+					incltext: false,             // 下にテキストを表示しない
+					backgroundcolor: 'FFFFFF',      // 背景白
+				});
+			} catch (e) {
+				console.error("Barcode Error:", e);
+			}
+		}
+
+		function downloadImage() {
+			const element = document.getElementById('preview-area');
+
+			html2canvas(element).then(canvas => {
+				const link = document.createElement('a');
+				link.download = 'address_label.png';
+				link.href = canvas.toDataURL('image/png');
+				link.click();
+			});
+		}
+
+		// 初回ロード時に実行
+		window.onload = generatePreview;
+	</script>
+
+</body>
+
+</html>

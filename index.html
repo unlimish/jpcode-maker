@@ -30,9 +30,9 @@
 			<!-- <p class="text-sm text-gray-500 mt-1">カスタマーバーコード付きの宛名ラベルを作成します</p> -->
 		</header>
 
-		<div class="flex grid grid-cols-1 lg:flex gap-8">
+		<div class="grid grid-cols-1 lg:flex gap-8">
 
-			<div class="w-3xs bg-black p-6 rounded-lg shadow-sm border border-gray-100 h-full">
+			<div class=" flex flex-col w-3xs bg-gray-900 backdrop-blur-sm  p-6 rounded-lg shadow-xl shadow-red-900/50">
 				<h2 class="text-lg font-semibold mb-4 text-gray-300 flex items-center">
 					<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -42,8 +42,8 @@
 					情報の入力
 				</h2>
 
-				<div class="space-y-4 ">
-					<div class="">
+				<div class="space-y-4 flex-1">
+					<div>
 						<label class="block text-sm font-medium text-gray-300 mb-1">郵便番号<span class="text-xs text-gray-400">
 								ハイフンなし</span></label>
 						<input type="text" id="inputPost" placeholder="1000001" value="1000001"
@@ -60,12 +60,13 @@
 						<input type="text" id="inputName" placeholder="日本 太郎 様" value="日本 太郎 様"
 							class="w-full px-4 py-2 bg-gray-800 border border-gray-800 rounded-md focus:ring-2 focus:ring-red-800 focus:border-red-800 outline-none transition-colors">
 					</div>
-
-					<button onclick="generatePreview()"
-						class="w-full bg-gray-800 hover:bg-black text-white font-bold py-3 px-4 rounded-md transition duration-200 mt-2">
-						プレビューを更新
-					</button>
 				</div>
+
+				<button onclick="generatePreview()"
+					class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-3 px-4 rounded-md transition duration-200 mt-8">
+					プレビューを更新
+				</button>
+
 			</div>
 
 			<div class="flex flex-col items-center">
@@ -81,7 +82,7 @@
 						プレビュー
 					</h2>
 					<button onclick="downloadImage()"
-						class="text-sm hover:bg-red-900 text-white py-1 px-3 rounded flex items-center transition-colors">
+						class="text-sm bg-red-800 hover:bg-red-900 text-white py-1 px-3 rounded flex items-center transition-colors">
 						<svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 								d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>

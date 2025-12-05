@@ -21,12 +21,12 @@
 	</style>
 </head>
 
-<body class="bg-gray-50 text-gray-800 p-6 min-h-screen">
+<body class="bg-gradient-to-b from-red-950 to-stone-950 text-white p-6 min-h-screen">
 
 	<div class="max-w-6xl mx-auto">
 
 		<header class="mb-8 text-center sm:text-left border-b border-gray-200 pb-4">
-			<h1 class="text-2xl font-bold text-gray-900">カスタマーコード宛名ラベルメーカー</h1>
+			<h1 class="text-2xl font-bold">カスタマーコード宛名ラベルメーカー</h1>
 			<!-- <p class="text-sm text-gray-500 mt-1">カスタマーバーコード付きの宛名ラベルを作成します</p> -->
 		</header>
 
@@ -70,7 +70,7 @@
 
 			<div class="flex flex-col items-center">
 				<div class="w-full flex justify-between items-center mb-4">
-					<h2 class="text-lg font-semibold text-gray-700 flex items-center">
+					<h2 class="text-lg font-semibold text-gray-300 flex items-center">
 						<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
 								d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -113,7 +113,6 @@
 	</div>
 
 	<script>
-		// ロジック部分は変更なし
 		function cleanAddressForBarcode(zip, address) {
 			let clean = address.replace(/[Ａ-Ｚａ-ｚ０-９－]/g, function (s) {
 				return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
